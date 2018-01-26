@@ -5,6 +5,12 @@ date: "1/25/2018"
 output: pdf_document
 ---
 
+```{r, echo = FALSE}
+
+library(combinat)
+
+```
+
 # Problem 1
 
 The answer is (ii) Drinking is associated with smoking, and alcohol causes liver cancer. The premise behind a confounding variable is, in this scenario, that drinkers tend to smoke more, and as a result, while the actual cause of liver cancer is alcohol, the act of smoking is being inappropriately labeled as the cause of liver cancer. In summary, while alcohol is the cause of liver cancer, because so many drinkers also smoke, smoking is being attributed as the cause of the liver cancer, when the alcohol is the true culprit.
@@ -45,3 +51,11 @@ It looks like the the groups are not homogeneous aside from the medication based
 ## Problem b
 
 In order to determine the efficacy of the Nitocinic Acid, I would look at the percent of deaths from those the adhered to the treatment from the protocol from the Nicotinic Group (13%) and the Placebo Group (15%). Once we specify that we are only looking at those that adhered, we are controlling for those that adhere as well as the other factors already considered. I do not believe that a valid comparison can be made at this point. Before concluding anything, I would want to run a 2-sample t-test to confirm whether or not the difference in means from the two samples (Nicotinic Group - 13% and Placebo Group - 15%) is significant enough for us to conlude whether or not the treatment is effective at reducing the death rate.
+
+# Problem 5
+
+```{r}
+
+choose(8,4)
+
+```
