@@ -57,7 +57,7 @@ confint(anova_1)
 
 ##### Part a
 
-# t ^ bt
+#
 
 ##### Part b
 
