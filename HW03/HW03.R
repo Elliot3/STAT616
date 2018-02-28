@@ -86,8 +86,24 @@ confint(anova_1)
 
 ########## Problem 3
 
+# t = 5
+# b = 4
+# n = bt = 20
+
+# 1) For each column (block), starting with the first, randomly permute t_1 to t_5 (representing treatments) without replacement and assign them to the cells in the order specified.
+# 2) Now I have a 5x4 table with the treatment types assigned to each cell
+# 3) For our first data row (t_1 to t_5), randomly select a block and enter the data into each cell matching the treatment designated from step 1
+# 4) Complete this process until all cells have data in them
 
 
+
+########## Problem 4
+
+# No. Due to the fact that observational studies are not randomized due to self-selection, a Complete Randomized Block design cannot be observational.
+
+
+
+########## Problem 5
 
 
 
