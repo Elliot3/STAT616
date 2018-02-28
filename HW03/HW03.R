@@ -121,9 +121,33 @@ data_5a <- data.frame(day = temp_day, doctor = temp_doc, value = temp_vals)
 
 ### Build the regression model
 
-lm_5a <- lm(value ~ (1|doctor), data = data_5a)
-summary(lm_5a)
-anova(lm_5a)
+# lm_5a <- lm(value ~ (1|doctor), data = data_5a)
+# summary(lm_5a)
+# anova(lm_5a)
+
+
+
+########## Problem 6
+
+
+
+##### Part a
+
+# Completely Randomized Block. No, because if there goal of the study is simply to "test three training methods in statistical sampling for auditing" then I don't
+# think that blocking by time elapsed since college graduation is a very useful blocking feature. If they were testing explicitly how the different training options
+# were affected by time since graduation, then I would think this is a good design. As it stands right now, the blocks seem arbitrary.
+
+
+
+##### Part b
+
+# Y_ij = Y_bar_.. + (Y_bar_i. - Y_bar_..) + (Y_bar_.j - Y_bar_..) + (Y_ij - Y_bar_i. - Y_bar_.j + Y_bar_..)
+
+
+
+##### Part c
+
+data_6 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/audit_b10.csv")
 
 
 
