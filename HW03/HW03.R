@@ -105,8 +105,25 @@ confint(anova_1)
 
 ########## Problem 5
 
+library(lme4)
 
+### Load in the data
 
+data_5 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/blood.csv")
+
+##### Part a
+
+temp_day <- rep(1:15, times = 3)
+temp_doc <- rep(1:3, each = 15)
+temp_vals <- c(data_5[,2], data_5[,3], data_5[,4])
+
+data_5a <- data.frame(day = temp_day, doctor = temp_doc, value = temp_vals)
+
+### Build the regression model
+
+lm_5a <- lm(value ~ (1|doctor), data = data_5a)
+summary(lm_5a)
+anova(lm_5a)
 
 
 
