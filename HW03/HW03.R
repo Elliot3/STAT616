@@ -119,6 +119,7 @@ error_1A_bon <- qt(0.995, df = n - 1)*((sd_1A)/sqrt(n))
 
 left_1A_bon <- mean_1A - error_1A_bon
 right_1A_bon <- mean_1A + error_1A_bon
+c(left_1A_bon, right_1A_bon)
 
 ### 1B - Confidence Interval
 
@@ -126,6 +127,7 @@ error_1B_bon <- qt(0.995, df = n - 1)*((sd_1B)/sqrt(n))
 
 left_1B_bon <- mean_1B - error_1B_bon
 right_1B_bon <- mean_1B + error_1B_bon
+c(left_1B_bon, right_1B_bon)
 
 ### 1C - Confidence Interval
 
@@ -133,6 +135,7 @@ error_1C_bon <- qt(0.995, df = n - 1)*((sd_1C)/sqrt(n))
 
 left_1C_bon <- mean_1C - error_1C_bon
 right_1C_bon <- mean_1C + error_1C_bon
+c(left_1C_bon, right_1C_bon)
 
 ### 1D - Confidence Interval
 
@@ -140,6 +143,7 @@ error_1D_bon <- qt(0.995, df = n - 1)*((sd_1D)/sqrt(n))
 
 left_1D_bon <- mean_1D - error_1D_bon
 right_1D_bon <- mean_1D + error_1D_bon
+c(left_1D_bon, right_1D_bon)
 
 ### 1E - Confidence Interval
 
@@ -147,6 +151,7 @@ error_1E_bon <- qt(0.995, df = n - 1)*((sd_1E)/sqrt(n))
 
 left_1E_bon <- mean_1E - error_1E_bon
 right_1E_bon <- mean_1E + error_1E_bon
+c(left_1E_bon, right_1E_bon)
 
 # The Bonferroni confidence intervals are much more conservative than our traditional t-statistic confidence intervals (ie its a wider range). I prefer
 # the traditional confidence interval due to the fact that with Bonferroni we are less likely to reject Ho which means we would be more likely to commit
@@ -304,8 +309,27 @@ bartlett.test(score ~ method, data = data_6)
 
 ##### Part f
 
-# Finish up later
+data_6f <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/audit_b5.csv")
 
+data_6f$block <- as.factor(data_6f$block)
+data_6f$method <- as.factor(data_6f$method)
+
+lm_6f <- lm(score ~ block + method, data = data_6f)
+lm_6f_summ <- summary(lm_6f)
+(lm_6f_anova <- anova(lm_6f))
+
+
+anova_6f <- aov(score ~ method, data = data_6f)
+(tukey_6f <- TukeyHSD(anova_6f))
+
+## Testing the assumptions
+
+resids_6f <- residuals(lm_6f)
+
+qqnorm(resids_6f)
+qqline(resids_6f)
+
+bartlett.test(score ~ method, data = data_6f)
 
 
 
@@ -352,6 +376,7 @@ data_3 <- data.frame(block = temp_blocks, type = temp_labs, value = temp_vals)
 
 ##### Part 1 - contr.treatment (default)
 
+options(contrasts = rep("contr.treament", 2))
 
 
 ### Build the regression model - contr.treatment (Dummy Coding) - alpha1 = 0
@@ -362,7 +387,11 @@ anova(lm_3a)
 
 ##### Part 2 - contr.sum (Zero Sum Coding) - alpha1 + alpha2 + ... = 0
 
+options(contrasts = rep("contr.sum", 2))
 
+lm_3a <- lm(value ~ block + type, data = data_3)
+(summary(lm_3a))
+anova(lm_3a)
 
 ((0.744+1.151+.992+.905) / 4) - ((0.772+1.186+1.061+1.025) / 4)
 

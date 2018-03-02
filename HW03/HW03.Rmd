@@ -487,11 +487,54 @@ TukeyHSD(anova_7)
 
 * See Hand-Written Answers section after Code Appendix
 
+# STAT616 - Problem 3
 
+```{r, echo = FALSE}
 
+temp_block <- c("1-1", "2-1","3-1", "4-1", "5-1", "1-2", "2-2", "3-2", "4-2")
+temp_aarau <- c(0.772, 0.744, 0.767, 0.745, 0.725, 0.844, 0.831, 0.867, 0.859)
+temp_karlsruhe <- c(1.186, 1.151, 1.322, 1.339, 1.200, 1.402, 1.365, 1.537, 1.559)
+temp_lehigh <- c(1.061, 0.992, 1.063, 1.062, 1.065, 1.178, 1.037, 1.086, 1.052)
+temp_cardiff <- c(1.025, 0.905, 0.930, 0.899, 0.871, 1.004, 0.853, 0.858, 0.805)
 
+data_3 <- data.frame(blocks = temp_block, aarau = temp_aarau, karlsruhe = temp_karlsruhe,
+                     lehigh = temp_lehigh, cardiff = temp_cardiff)
 
+temp_blocks <- rep(data_3[,1], times = 4)
+temp_labs <- rep(names(data_3[-1]), each = 9)
+temp_vals <- c(data_3[,2], data_3[,3], data_3[,4], data_3[,5])
 
+data_3 <- data.frame(block = temp_blocks, type = temp_labs, value = temp_vals)
+
+```
+
+## Part 1 - Dummy Coding
+
+```{r, echo = FALSE}
+
+options(contrasts = rep("contr.treatment", 2))
+
+lm_3a <- lm(value ~ block + type, data = data_3)
+lm_3a_summ <- summary(lm_3a)
+lm_3a_anova <- anova(lm_3a)
+
+```
+
+* See Hand-Written Answers section after Code Appendix
+
+## Part 2 - Zero Sum Coding
+
+```{r, echo = FALSE}
+
+options(contrasts = rep("contr.sum", 2))
+
+lm_3a <- lm(value ~ block + type, data = data_3)
+lm_3a_summ <- summary(lm_3a)
+lm_3a_anova <- anova(lm_3a)
+
+```
+
+* See Hand-Written Answers section after Code Appendix
 
 # Code Appendix
 
@@ -775,6 +818,51 @@ summary(lm_7)
 
 anova_7 <- aov(noise ~ plate + shape, data = data_7)
 TukeyHSD(anova_7)
+
+```
+
+## STAT616 - Problem 3
+
+```{r}
+
+temp_block <- c("1-1", "2-1","3-1", "4-1", "5-1", "1-2", "2-2", "3-2", "4-2")
+temp_aarau <- c(0.772, 0.744, 0.767, 0.745, 0.725, 0.844, 0.831, 0.867, 0.859)
+temp_karlsruhe <- c(1.186, 1.151, 1.322, 1.339, 1.200, 1.402, 1.365, 1.537, 1.559)
+temp_lehigh <- c(1.061, 0.992, 1.063, 1.062, 1.065, 1.178, 1.037, 1.086, 1.052)
+temp_cardiff <- c(1.025, 0.905, 0.930, 0.899, 0.871, 1.004, 0.853, 0.858, 0.805)
+
+data_3 <- data.frame(blocks = temp_block, aarau = temp_aarau, karlsruhe = temp_karlsruhe,
+                     lehigh = temp_lehigh, cardiff = temp_cardiff)
+
+temp_blocks <- rep(data_3[,1], times = 4)
+temp_labs <- rep(names(data_3[-1]), each = 9)
+temp_vals <- c(data_3[,2], data_3[,3], data_3[,4], data_3[,5])
+
+data_3 <- data.frame(block = temp_blocks, type = temp_labs, value = temp_vals)
+
+```
+
+## Part 1 - Dummy Coding
+
+```{r}
+
+options(contrasts = rep("contr.treatment", 2))
+
+lm_3a <- lm(value ~ block + type, data = data_3)
+(summary(lm_3a))
+anova(lm_3a)
+
+```
+
+## Part 2 - Zero Sum Coding
+
+```{r}
+
+options(contrasts = rep("contr.sum", 2))
+
+lm_3a <- lm(value ~ block + type, data = data_3)
+summary(lm_3a)
+anova(lm_3a)
 
 ```
 
