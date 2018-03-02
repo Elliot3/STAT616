@@ -5,8 +5,6 @@ library(lme4)
 
 ########## Problem 1
 
-
-
 ##### Part a
 
 ### Load in the data
@@ -20,8 +18,8 @@ data_1 <- data.frame(type = type, value = value)
 ### Build the regression model
 
 lm_1 <- lm(value ~ type, data = data_1)
-summary(lm_1)
-anova(lm_1)
+lm_1_summ <- summary(lm_1)
+lm_1_anova <- anova(lm_1)
 
 ### Summary
 
@@ -57,6 +55,7 @@ error_1A <- qt(0.975, df = n - 1)*((sd_1A)/sqrt(n))
 
 left_1A <- mean_1A - error_1A
 right_1A <- mean_1A + error_1A
+c(left_1A, right_1A)
 
 ### 1B - Confidence Interval
 
@@ -69,6 +68,7 @@ error_1B <- qt(0.975, df = n - 1)*((sd_1B)/sqrt(n))
 
 left_1B <- mean_1B - error_1B
 right_1B <- mean_1B + error_1B
+c(left_1B, right_1B)
 
 ### 1C - Confidence Interval
 
@@ -81,6 +81,7 @@ error_1C <- qt(0.975, df = n - 1)*((sd_1C)/sqrt(n))
 
 left_1C <- mean_1C - error_1C
 right_1C <- mean_1C + error_1C
+c(left_1C, right_1C)
 
 ### 1D - Confidence Interval
 
@@ -93,6 +94,7 @@ error_1D <- qt(0.975, df = n - 1)*((sd_1D)/sqrt(n))
 
 left_1D <- mean_1D - error_1D
 right_1D <- mean_1D + error_1D
+c(left_1D, right_1D)
 
 ### 1E - Confidence Interval
 
@@ -105,6 +107,7 @@ error_1E <- qt(0.975, df = n - 1)*((sd_1E)/sqrt(n))
 
 left_1E <- mean_1E - error_1E
 right_1E <- mean_1E + error_1E
+c(left_1E, right_1E)
 
 
 
@@ -315,19 +318,53 @@ bartlett.test(score ~ method, data = data_6)
 
 ########## Problem 7
 
+data_7 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/resistor.csv")
+
+data_7$plate <- as.factor(data_7$plate)
+data_7$shape <- rep(c("A", "B", "C", "D"), each = 4)
+data_7$shape <- as.factor(data_7$shape)
+
+lm_7 <- lm(noise ~ plate + shape, data = data_7)
+summary(lm_7)
+anova(lm_7)
+
+anova_7 <- aov(noise ~ plate + shape, data = data_7)
+TukeyHSD(anova_7)
 
 
 
+########## STAT616 - Problem 3
+
+temp_block <- c("1-1", "2-1","3-1", "4-1", "5-1", "1-2", "2-2", "3-2", "4-2")
+temp_aarau <- c(0.772, 0.744, 0.767, 0.745, 0.725, 0.844, 0.831, 0.867, 0.859)
+temp_karlsruhe <- c(1.186, 1.151, 1.322, 1.339, 1.200, 1.402, 1.365, 1.537, 1.559)
+temp_lehigh <- c(1.061, 0.992, 1.063, 1.062, 1.065, 1.178, 1.037, 1.086, 1.052)
+temp_cardiff <- c(1.025, 0.905, 0.930, 0.899, 0.871, 1.004, 0.853, 0.858, 0.805)
+
+data_3 <- data.frame(blocks = temp_block, aarau = temp_aarau, karlsruhe = temp_karlsruhe,
+                     lehigh = temp_lehigh, cardiff = temp_cardiff)
+
+temp_blocks <- rep(data_3[,1], times = 4)
+temp_labs <- rep(names(data_3[-1]), each = 9)
+temp_vals <- c(data_3[,2], data_3[,3], data_3[,4], data_3[,5])
+
+data_3 <- data.frame(block = temp_blocks, type = temp_labs, value = temp_vals)
+
+##### Part 1 - contr.treatment (default)
 
 
 
+### Build the regression model - contr.treatment (Dummy Coding) - alpha1 = 0
+
+lm_3a <- lm(value ~ block + type, data = data_3)
+summary(lm_3a)
+anova(lm_3a)
+
+##### Part 2 - contr.sum (Zero Sum Coding) - alpha1 + alpha2 + ... = 0
 
 
 
-
-
-
-
+((0.744+1.151+.992+.905) / 4) - ((0.772+1.186+1.061+1.025) / 4)
 
 
 

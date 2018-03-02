@@ -1,0 +1,788 @@
+---
+title: 'STAT616 - HW #3'
+author: "Elliot Smith"
+date: "3/2/2018"
+output: pdf_document
+---
+
+```{r, echo = FALSE}
+
+## Add necessary libraries
+
+suppressMessages(
+    library(pairwiseCI)
+)
+
+suppressMessages(
+    library(lme4)
+)
+
+```
+
+# Problem 1
+
+```{r, echo = FALSE}
+
+## Load in the data
+
+data_1 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/tire.csv")
+data_1 <- data_1[,-1]
+value <- c(data_1[,1], data_1[,2], data_1[,3], data_1[,4], data_1[,5])
+type <- c(rep("A", 10), rep("B", 10), rep("C", 10), rep("D", 10), rep("E", 10))
+data_1 <- data.frame(type = type, value = value)
+
+```
+
+## Part a
+
+```{r, echo = FALSE}
+
+## Build the regression and ANOVA models
+
+lm_1 <- lm(value ~ type, data = data_1)
+lm_1_summ <- summary(lm_1)
+lm_1_anova <- anova(lm_1)
+
+```
+
+* As we can see from the ANOVA table (see code appendix, Problem 1, Part a), we have received an F-value of 7.8415, which is certainly greater than 1, this implies that there is a significant difference between at least one of the means of the different tire brands.
+
+* I used the following assumptions in my analysis:
+    * Errors are iid Normal(0, $\sigma^2$)
+    * Variances are equal for all tire brands
+    
+* I have confirmed these assumptions using a QQ Plot for Error Normality and a Barlett Test for Variance Homogeneity (see code appendix, Problem 1, Part a):
+    * My QQ Plot confirmed that my errors are approximately normal
+    * My Bartlett Test got a p-value of 0.1362, so I will not reject my Ho that the variances are equal
+    
+## Part b
+
+```{r, echo = FALSE}
+
+## Standard Confidence Intervals
+
+### 1A - Confidence Interval
+
+data_1A <- data_1[1:10,]
+n <- length(data_1A$value)
+mean_1A <- mean(data_1A$value)
+sd_1A <- sd(data_1A$value)
+
+error_1A <- qt(0.975, df = n - 1)*((sd_1A)/sqrt(n))
+
+left_1A <- mean_1A - error_1A
+right_1A <- mean_1A + error_1A
+
+### 1B - Confidence Interval
+
+data_1B <- data_1[11:20,]
+n <- length(data_1B$value)
+mean_1B <- mean(data_1B$value)
+sd_1B <- sd(data_1B$value)
+
+error_1B <- qt(0.975, df = n - 1)*((sd_1B)/sqrt(n))
+
+left_1B <- mean_1B - error_1B
+right_1B <- mean_1B + error_1B
+
+### 1C - Confidence Interval
+
+data_1C <- data_1[21:30,]
+n <- length(data_1C$value)
+mean_1C <- mean(data_1C$value)
+sd_1C <- sd(data_1C$value)
+
+error_1C <- qt(0.975, df = n - 1)*((sd_1C)/sqrt(n))
+
+left_1C <- mean_1C - error_1C
+right_1C <- mean_1C + error_1C
+
+### 1D - Confidence Interval
+
+data_1D <- data_1[31:40,]
+n <- length(data_1D$value)
+mean_1D <- mean(data_1D$value)
+sd_1D <- sd(data_1D$value)
+
+error_1D <- qt(0.975, df = n - 1)*((sd_1D)/sqrt(n))
+
+left_1D <- mean_1D - error_1D
+right_1D <- mean_1D + error_1D
+
+### 1E - Confidence Interval
+
+data_1E <- data_1[41:50,]
+n <- length(data_1E$value)
+mean_1E <- mean(data_1E$value)
+sd_1E <- sd(data_1E$value)
+
+error_1E <- qt(0.975, df = n - 1)*((sd_1E)/sqrt(n))
+
+left_1E <- mean_1E - error_1E
+right_1E <- mean_1E + error_1E
+
+```
+
+* Standard Confidence Intervals (using t method):
+    * A: 185.5131 - 190.9469
+    * B: 188.8118 - 201.6482
+    * C: 183.7718 - 191.0682
+    * D: 187.222 - 195.198
+    * E: 196.3295 - 204.3705
+
+```{r, echo = FALSE}
+
+### Bonferroni Confidence Intervals
+
+### 1A - Confidence Interval
+
+error_1A_bon <- qt(0.995, df = n - 1)*((sd_1A)/sqrt(n))
+
+left_1A_bon <- mean_1A - error_1A_bon
+right_1A_bon <- mean_1A + error_1A_bon
+
+### 1B - Confidence Interval
+
+error_1B_bon <- qt(0.995, df = n - 1)*((sd_1B)/sqrt(n))
+
+left_1B_bon <- mean_1B - error_1B_bon
+right_1B_bon <- mean_1B + error_1B_bon
+
+### 1C - Confidence Interval
+
+error_1C_bon <- qt(0.995, df = n - 1)*((sd_1C)/sqrt(n))
+
+left_1C_bon <- mean_1C - error_1C_bon
+right_1C_bon <- mean_1C + error_1C_bon
+
+### 1D - Confidence Interval
+
+error_1D_bon <- qt(0.995, df = n - 1)*((sd_1D)/sqrt(n))
+
+left_1D_bon <- mean_1D - error_1D_bon
+right_1D_bon <- mean_1D + error_1D_bon
+
+### 1E - Confidence Interval
+
+error_1E_bon <- qt(0.995, df = n - 1)*((sd_1E)/sqrt(n))
+
+left_1E_bon <- mean_1E - error_1E_bon
+right_1E_bon <- mean_1E + error_1E_bon
+
+```
+    
+* Bonferroni Confidence Intervals (using t method):
+    * A: 184.3269 - 192.1331
+    * B: 186.0095 - 204.4505
+    * C: 182.1789 - 192.6611
+    * D: 185.4808 - 196.9392
+    * E: 194.5741 - 206.1259
+    
+* The Bonferroni confidence intervals are much more conservative than our traditional t-statistic confidence intervals (ie its a wider range).
+* I prefer the traditional confidence interval due to the fact that with Bonferroni we are less likely to reject Ho which means we would be more likely to commit a Type II error.
+    
+## Part c
+
+```{r, echo = FALSE}
+
+### Construct the ANOVA model
+
+anova_1 <- aov(value ~ type, data = data_1)
+
+```
+
+### Tukey Output
+
+```{r, echo = FALSE}
+
+### Construct the Tukey confidence intervals
+
+TukeyHSD(anova_1)
+
+```
+
+* The largest differences are:
+    * E-C: 12.93
+    * E-A: 12.12
+    * E-D: 9.14
+* This shows that E most certainly has a different mean than these other tire brands, this is confirmed by the p-values of all the afforementioned comparisons which are significant at the 95% level.
+* C-B is also significant at the 95% level and we can reject that these two have the same mean as well.
+
+### Bonferroni Output
+
+```{r, echo = FALSE}
+
+### Construct the Bonferroni confidence intervals
+
+pairwiseCI(value ~ type, data = data_1, conf.level = 0.99)
+
+```
+
+* We get very similar results for the Bonferroni as the Tukey method, but as we can see the bounds are certainly larger:
+    * Bonferroni B-A: -2.4 - 16.4
+    * Tukey B-A: -0.7 - 14.7
+* This shows us that the Bonferroni method will produce much wider bounds than the Tukey method
+
+### Overall Interpetation
+
+* Again, I prefer the tighter, Tukey confidence interval due to the fact that with Bonferroni we are less likely to reject Ho which means we would be more likely to commit a Type II error.
+
+# Problem 2
+
+* See Hand-Written Answers section after Code Appendix
+
+# Problem 3
+
+* For each of the four columns (blocks) of a 5x4 matrix, starting with the first, randomly permute t_1 to t_5 (representing treatments) without replacement and assign them to the cells in the order specified.
+* We now have a 5x4 table with all 5 treatments randomly assigned to each cell within each column.
+* See Hand-Written Answers section after Code Appendix for the Sample Table
+
+# Problem 4
+
+* No. Due to the fact that observational studies are not randomized due to self-selection, a Complete Randomized Block design cannot be observational. If the design of an experiment is not randomized, then the experiement cannot be a CRB.
+
+# Problem 5
+
+```{r, echo = FALSE}
+
+data_5 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/blood.csv")
+
+```
+
+## Part a
+
+```{r, echo = FALSE}
+
+temp_dev <- rep(c("dev1", "dev2", "dev3"), each = 15)
+temp_vals <- c(data_5[,2], data_5[,3], data_5[,4])
+
+data_5a <- data.frame(device = temp_dev, value = temp_vals)
+
+lm_5a <- lm(value ~ device, data = data_5a)
+lm_5a_summ <- summary(lm_5a)
+lm_5a_anova <- anova(lm_5a)
+
+t_val <- abs(qt(0.025, 2))
+std_err <- 0.014
+
+```
+
+### ANOVA Table
+
+```{r, echo = FALSE}
+
+lm_5a_anova
+
+```
+
+* From the ANOVA table we can see that the variation attributed to within the groups is significantly lower than the variation between the groups.
+
+### F-Test
+
+* The F-Test is performed by the ANOVA Table. We can see that the p-value associated is extremely high, almost 1, meaning that we must fail to reject Ho that the treatment devices have the same mean.
+
+### Estimate of Mean Blood Pressure
+
+* This estimate, from the Regresssion Summary (see Code Appendix, Problem 5, Part a), is 128.08067.
+
+### Estimates of the two Variance Components
+
+* $\hat\sigma_\epsilon = 88.082$
+* $\hat\sigma_\alpha^2 = \frac{0 - 88.082}{15} = -5.87$
+* Since $\hat\sigma_\alpha^2$ is negative, $\hat\sigma_\alpha = 0$
+
+### 95% Confidence Interval
+
+* $128.08067 \pm 4.3027(0.014) = 128.0204, 128.1409$
+* The confidence interval is quite tight in this situation mostly due to the small size of the standard error.
+
+## Part b
+
+```{r, echo = FALSE}
+
+temp_doc <- rep(c("doc1", "doc2", "doc3"), each = 15)
+temp_vals <- c(data_5[,5], data_5[,6], data_5[,7])
+
+data_5b <- data.frame(doctor = temp_doc, value = temp_vals)
+
+lm_5b <- lm(value ~ doctor, data = data_5b)
+lm_5b_summ <- summary(lm_5b)
+lm_5b_anova <- anova(lm_5b)
+
+t_val <- abs(qt(0.025, 2))
+std_err <- 0.014
+
+```
+
+### ANOVA Table
+
+```{r, echo = FALSE}
+
+lm_5b_anova
+
+```
+
+* From the ANOVA table we can see that the variation attributed to between the groups is significantly lower than the variation within the groups.
+
+### F-Test
+
+* The F-Test is performed by the ANOVA Table. We can see that the p-value associated is extremely low, almost 0, meaning that we must reject Ho that the treatment doctors have the same mean.
+
+### Estimate of Mean Blood Pressure
+
+* This estimate, from the Regresssion Summary (see Code Appendix, Problem 5, Part a), is 125.9360.
+
+### Estimates of the two Variance Components
+
+* $\hat\sigma_\epsilon = 1.784$
+* $\hat\sigma_\alpha^2 = \frac{248.163 - 1.784}{15} = 16.43$
+* Since $\hat\sigma_\alpha^2$ is 16.43, $\hat\sigma_\alpha = 4.05$
+
+### 95% Confidence Interval
+
+* $125.9360 \pm 4.3027(0.014) = 125.8758, 125.9962$
+* The confidence interval is quite tight in this situation mostly due to the small size of the standard error.
+
+## Part c
+
+* I think there is an error in my calculation because the confidence interval should me larger for the doctors in Part b, perhaps I incorrectly calculated the standard error. Even though my calculation may be incorrect, I believe that the readings by the devices should be much more exact than the doctors, since so little of the variation in the devices comes from between the devices (it mostly comes from within); this is opposite for the doctors.
+
+# Problem 6
+
+## Part a
+
+* Completely Randomized Block. Yes, because I would expect a different results on the training for recent graduates vs. those that have had several years elapse since they graduated. I think that time since graduation is a good blocking methodology because I would expect more experienced auditors to get better scores so the blocking here will removing the confounding from time since graduation.
+
+## Part b
+
+* See Hand-Written Answers section after Code Appendix
+
+## Part c
+
+* See the ANOVA Table below:
+
+```{r, echo = FALSE}
+
+data_6 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/audit_b10.csv")
+
+data_6$block <- as.factor(data_6$block)
+data_6$method <- as.factor(data_6$method)
+
+```
+
+```{r, echo = FALSE}
+
+lm_6c <- lm(score ~ block + method, data = data_6)
+lm_6c_summ <- summary(lm_6c)
+(lm_6c_anova <- anova(lm_6c))
+
+```
+
+## Part d
+
+* Since the p-value for the blocks is 0.0001, we can reject the Ho that the blocks are all the same. So yes, blocking was needed.
+
+## Part e
+
+* Since the p-value for methods, according the the ANOVA Table, is almost 0, we can reject our null hypothesis that the means are all the same for the different treatment methods.
+
+```{r, echo = FALSE}
+
+anova_6e <- aov(score ~ method, data = data_6)
+(tukey_6e <- TukeyHSD(anova_6e))
+
+```
+
+* According to the above Tukey pairwise comparison of the different methods, the following methods differ based on their associated p-values:
+    * Method 3 and Method 1
+    * Method 3 and Method 2
+    
+* I used the following assumptions in my analysis:
+    * Errors are iid Normal(0, $\sigma^2$)
+    * Variances are equal for all methods
+    
+* I have confirmed these assumptions using a QQ Plot for Error Normality and a Barlett Test for Variance Homogeneity (see code appendix, Problem 6, Part e):
+    * My QQ Plot confirmed that my errors are approximately normal
+    * My Bartlett Test got a p-value of 0.5041, so I will not reject my Ho that the variances are equal
+    
+## Part f
+
+* See the ANOVA Table below:
+
+```{r, echo = FALSE}
+
+data_6f <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/audit_b5.csv")
+
+data_6f$block <- as.factor(data_6f$block)
+data_6f$method <- as.factor(data_6f$method)
+
+```
+
+```{r, echo = FALSE}
+
+lm_6f <- lm(score ~ block + method, data = data_6f)
+lm_6f_summ <- summary(lm_6f)
+(lm_6f_anova <- anova(lm_6f))
+
+```
+
+* In the case of the new data, since the p-value for the blocks is extremely small, we can reject the Ho that the blocks are all the same. So yes, blocking was needed again.
+
+* And again, since the p-value for methods, according the the ANOVA Table, is almost 0, we can reject our null hypothesis that the means are all the same for the different treatment methods according to our blocking protocol.
+
+```{r, echo = FALSE}
+
+anova_6f <- aov(score ~ method, data = data_6f)
+(tukey_6f <- TukeyHSD(anova_6f))
+
+```
+
+* According to the above Tukey pairwise comparison of the different methods, ALL of the methods are different at a significant level!
+
+* I used the following assumptions in my analysis:
+    * Errors are iid Normal(0, $\sigma^2$)
+    * Variances are equal for all methods
+    
+* I have confirmed these assumptions using a QQ Plot for Error Normality and a Barlett Test for Variance Homogeneity (see code appendix, Problem 6, Part f):
+    * My QQ Plot confirmed that my errors are approximately normal
+    * My Bartlett Test got a p-value of 0.2923, so I will not reject my Ho that the variances are equal
+    
+## Part g
+
+* I prefer the second experiment because we rejected Ho in all cases including the differences in means for each of the methods. My biggest concern is making a Type II error, so I would rather be in the position to reject an Ho then falsely not reject it.
+
+# Problem 7
+
+* By building a BIBD (See Hand-Written Answers section after Code Appendix) I will analyze the affect of the shape on the noice, blocking by the plate.
+
+```{r, echo = FALSE}
+
+data_7 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/resistor.csv")
+
+data_7$plate <- as.factor(data_7$plate)
+data_7$shape <- rep(c("A", "B", "C", "D"), each = 4)
+data_7$shape <- as.factor(data_7$shape)
+
+lm_7 <- lm(noise ~ plate + shape, data = data_7)
+lm_7_summ <- summary(lm_7)
+(lm_7_anoca <- anova(lm_7))
+
+```
+
+* See the above ANOVA Table. Based on both the p-value for the plates (0.02) and the p-value for the shape (0.01) we can reject each null hypothesis: (1) that the mean values are the same across blocks (meaning blocking is a good idea) and (2) that the mean values are the same across shapes.
+
+```{r, echo = FALSE}
+
+anova_7 <- aov(noise ~ plate + shape, data = data_7)
+TukeyHSD(anova_7)
+
+```
+
+* To figure out which are different, please refer to the above Tukey pairwise comparision tables.
+* We may conclude the following:
+    * Plate 1 is significantly different then the other plates; it is the only plate whose p-value shows significant difference when compared to the others
+    * Comparing both shapes A and B, as well as shapes A and D yield different results and we may conclude that there difference is significant
+    
+# STAT616 - Problems 1 and 2
+
+* See Hand-Written Answers section after Code Appendix
+
+
+
+
+
+
+
+# Code Appendix
+
+## Problem 1
+
+```{r}
+
+## Load in the data
+
+data_1 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/tire.csv")
+data_1 <- data_1[,-1]
+value <- c(data_1[,1], data_1[,2], data_1[,3], data_1[,4], data_1[,5])
+type <- c(rep("A", 10), rep("B", 10), rep("C", 10), rep("D", 10), rep("E", 10))
+data_1 <- data.frame(type = type, value = value)
+
+```
+
+### Part a
+
+```{r}
+
+## Build the regression model
+
+lm_1 <- lm(value ~ type, data = data_1)
+lm_1_summ <- summary(lm_1)
+anova(lm_1)
+
+## Test my assumptions
+
+resids_1 <- residuals(lm_1)
+
+qqnorm(resids_1)
+qqline(resids_1)
+
+bartlett.test(value ~ type, data = data_1)
+
+
+```
+
+### Part b
+
+```{r}
+
+### Standard Confidence Intervals
+
+### 1A - Confidence Interval
+
+data_1A <- data_1[1:10,]
+n <- length(data_1A$value)
+mean_1A <- mean(data_1A$value)
+sd_1A <- sd(data_1A$value)
+
+error_1A <- qt(0.975, df = n - 1)*((sd_1A)/sqrt(n))
+
+left_1A <- mean_1A - error_1A
+right_1A <- mean_1A + error_1A
+
+### 1B - Confidence Interval
+
+data_1B <- data_1[11:20,]
+n <- length(data_1B$value)
+mean_1B <- mean(data_1B$value)
+sd_1B <- sd(data_1B$value)
+
+error_1B <- qt(0.975, df = n - 1)*((sd_1B)/sqrt(n))
+
+left_1B <- mean_1B - error_1B
+right_1B <- mean_1B + error_1B
+
+### 1C - Confidence Interval
+
+data_1C <- data_1[21:30,]
+n <- length(data_1C$value)
+mean_1C <- mean(data_1C$value)
+sd_1C <- sd(data_1C$value)
+
+error_1C <- qt(0.975, df = n - 1)*((sd_1C)/sqrt(n))
+
+left_1C <- mean_1C - error_1C
+right_1C <- mean_1C + error_1C
+
+### 1D - Confidence Interval
+
+data_1D <- data_1[31:40,]
+n <- length(data_1D$value)
+mean_1D <- mean(data_1D$value)
+sd_1D <- sd(data_1D$value)
+
+error_1D <- qt(0.975, df = n - 1)*((sd_1D)/sqrt(n))
+
+left_1D <- mean_1D - error_1D
+right_1D <- mean_1D + error_1D
+
+### 1E - Confidence Interval
+
+data_1E <- data_1[41:50,]
+n <- length(data_1E$value)
+mean_1E <- mean(data_1E$value)
+sd_1E <- sd(data_1E$value)
+
+error_1E <- qt(0.975, df = n - 1)*((sd_1E)/sqrt(n))
+
+left_1E <- mean_1E - error_1E
+right_1E <- mean_1E + error_1E
+
+
+
+## Bonferroni Confidence Intervals
+
+### 1A - Confidence Interval
+
+error_1A_bon <- qt(0.995, df = n - 1)*((sd_1A)/sqrt(n))
+
+left_1A_bon <- mean_1A - error_1A_bon
+right_1A_bon <- mean_1A + error_1A_bon
+c(left_1A_bon, right_1A_bon)
+
+### 1B - Confidence Interval
+
+error_1B_bon <- qt(0.995, df = n - 1)*((sd_1B)/sqrt(n))
+
+left_1B_bon <- mean_1B - error_1B_bon
+right_1B_bon <- mean_1B + error_1B_bon
+c(left_1B_bon, right_1B_bon)
+
+### 1C - Confidence Interval
+
+error_1C_bon <- qt(0.995, df = n - 1)*((sd_1C)/sqrt(n))
+
+left_1C_bon <- mean_1C - error_1C_bon
+right_1C_bon <- mean_1C + error_1C_bon
+c(left_1C_bon, right_1C_bon)
+
+### 1D - Confidence Interval
+
+error_1D_bon <- qt(0.995, df = n - 1)*((sd_1D)/sqrt(n))
+
+left_1D_bon <- mean_1D - error_1D_bon
+right_1D_bon <- mean_1D + error_1D_bon
+c(left_1D_bon, right_1D_bon)
+
+### 1E - Confidence Interval
+
+error_1E_bon <- qt(0.995, df = n - 1)*((sd_1E)/sqrt(n))
+
+left_1E_bon <- mean_1E - error_1E_bon
+right_1E_bon <- mean_1E + error_1E_bon
+c(left_1E_bon, right_1E_bon)
+
+```
+
+### Part c
+
+```{r}
+
+### Construct the ANOVA model
+
+anova_1 <- aov(value ~ type, data = data_1)
+
+### Construct the Tukey confidence intervals
+
+TukeyHSD(anova_1)
+
+### Construct the Bonferroni confidence intervals
+
+pairwiseCI(value ~ type, data = data_1, conf.level = 0.99)
+
+```
+
+## Problem 5
+
+### Part a
+
+```{r}
+
+temp_dev <- rep(c("dev1", "dev2", "dev3"), each = 15)
+temp_vals <- c(data_5[,2], data_5[,3], data_5[,4])
+
+data_5a <- data.frame(device = temp_dev, value = temp_vals)
+
+lm_5a <- lm(value ~ device, data = data_5a)
+summary(lm_5a)
+anova(lm_5a)
+
+```
+
+### Part b
+
+```{r}
+
+temp_doc <- rep(c("doc1", "doc2", "doc3"), each = 15)
+temp_vals <- c(data_5[,5], data_5[,6], data_5[,7])
+
+data_5b <- data.frame(doctor = temp_doc, value = temp_vals)
+
+lm_5b <- lm(value ~ doctor, data = data_5b)
+summary(lm_5b)
+anova(lm_5b)
+
+```
+
+## Problem 6
+
+### Part c
+
+```{r}
+
+data_6 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/audit_b10.csv")
+
+data_6$block <- as.factor(data_6$block)
+data_6$method <- as.factor(data_6$method)
+
+```
+
+```{r}
+
+lm_6c <- lm(score ~ block + method, data = data_6)
+summary(lm_6c)
+anova(lm_6c)
+
+```
+
+### Part e
+
+```{r}
+
+anova_6e <- aov(score ~ method, data = data_6)
+(tukey_6e <- TukeyHSD(anova_6e))
+
+## Testing the assumptions
+
+resids_6 <- residuals(lm_6c)
+
+qqnorm(resids_6)
+qqline(resids_6)
+
+bartlett.test(score ~ method, data = data_6)
+
+```
+
+### Part f
+
+```{r}
+
+data_6f <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/audit_b5.csv")
+
+data_6f$block <- as.factor(data_6f$block)
+data_6f$method <- as.factor(data_6f$method)
+
+lm_6f <- lm(score ~ block + method, data = data_6f)
+lm_6f_summ <- summary(lm_6f)
+(lm_6f_anova <- anova(lm_6f))
+
+anova_6f <- aov(score ~ method, data = data_6f)
+(tukey_6f <- TukeyHSD(anova_6f))
+
+## Testing the assumptions
+
+resids_6f <- residuals(lm_6f)
+
+qqnorm(resids_6f)
+qqline(resids_6f)
+
+bartlett.test(score ~ method, data = data_6f)
+
+```
+
+## Problem 7
+
+```{r}
+
+data_7 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/resistor.csv")
+
+data_7$plate <- as.factor(data_7$plate)
+data_7$shape <- rep(c("A", "B", "C", "D"), each = 4)
+data_7$shape <- as.factor(data_7$shape)
+
+lm_7 <- lm(noise ~ plate + shape, data = data_7)
+summary(lm_7)
+(lm_7_anoca <- anova(lm_7))
+
+anova_7 <- aov(noise ~ plate + shape, data = data_7)
+TukeyHSD(anova_7)
+
+```
+
+
+
+
+
+
+
+
+
