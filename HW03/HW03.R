@@ -1,4 +1,5 @@
 library(pairwiseCI)
+library(lme4)
 
 
 
@@ -199,7 +200,7 @@ pairwiseCI(value ~ type, data = data_1, conf.level = 0.99)
 
 ########## Problem 5
 
-library(lme4)
+
 
 ### Load in the data
 
@@ -207,18 +208,38 @@ data_5 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/blood.c
 
 ##### Part a
 
-temp_day <- rep(1:15, times = 3)
-temp_doc <- rep(1:3, each = 15)
+temp_dev <- rep(c("dev1", "dev2", "dev3"), each = 15)
 temp_vals <- c(data_5[,2], data_5[,3], data_5[,4])
 
-data_5a <- data.frame(day = temp_day, doctor = temp_doc, value = temp_vals)
+data_5a <- data.frame(device = temp_dev, value = temp_vals)
+
+t_val <- abs(qt(0.025, 2))
+std_err <- 0.014
 
 ### Build the regression model
 
-# lm_5a <- lm(value ~ (1|doctor), data = data_5a)
-# summary(lm_5a)
-# anova(lm_5a)
+lm_5a <- lm(value ~ device, data = data_5a)
+summary(lm_5a)
+anova(lm_5a)
 
+
+
+##### Part b - Do the same stuff for Part b as Part a
+
+temp_doc <- rep(c("doc1", "doc2", "doc3"), each = 15)
+temp_vals <- c(data_5[,5], data_5[,6], data_5[,7])
+
+data_5b <- data.frame(doctor = temp_doc, value = temp_vals)
+
+### Build the regression model
+
+lm_5b <- lm(value ~ doctor, data = data_5b)
+summary(lm_5b)
+anova(lm_5b)
+
+##### Part c
+
+# Finish up later
 
 
 ########## Problem 6
@@ -227,15 +248,15 @@ data_5a <- data.frame(day = temp_day, doctor = temp_doc, value = temp_vals)
 
 ##### Part a
 
-# Completely Randomized Block. No, because if there goal of the study is simply to "test three training methods in statistical sampling for auditing" then I don't
-# think that blocking by time elapsed since college graduation is a very useful blocking feature. If they were testing explicitly how the different training options
-# were affected by time since graduation, then I would think this is a good design. As it stands right now, the blocks seem arbitrary.
+# Completely Randomized Block. Yes, because I would expect a different results on the training for recent graduates vs. those that have had several years elapse
+# since they graduates. I think that time since graduation is a good blocking methodology because I would expect more experienced auditors to get better scores.
 
 
 
 ##### Part b
 
 # Y_ij = Y_bar_.. + (Y_bar_i. - Y_bar_..) + (Y_bar_.j - Y_bar_..) + (Y_ij - Y_bar_i. - Y_bar_.j + Y_bar_..)
+# Y_ij = mu + alpha_i + Beta_j + epsilon_ij
 
 
 
@@ -243,7 +264,56 @@ data_5a <- data.frame(day = temp_day, doctor = temp_doc, value = temp_vals)
 
 data_6 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW03/audit_b10.csv")
 
+data_6$block <- as.factor(data_6$block)
+data_6$method <- as.factor(data_6$method)
 
+lm_6c <- lm(score ~ block + method, data = data_6)
+summary(lm_6c)
+anova(lm_6c)
+
+
+
+##### Part d
+
+# Since the p-value for the blocks is 0.0001, we can reject the Ho that the blocks are all the same. So yes, blocking was needed.
+
+
+
+##### Part e
+
+# Based on the p-value for the methods is significantly less than 0, we may reject the Ho at the methods are all the same.
+
+anova_6c <- aov(score ~ method, data = data_6)
+TukeyHSD(anova_6c)
+
+# The assumptions I used are: (1) Errors are iid Normal(0, sigma-squared) and (2) the variances are equal for all tire brands.
+
+### Test my assumptions
+
+resids_6 <- residuals(lm_6c)
+
+qqnorm(resids_6)
+qqline(resids_6)
+
+bartlett.test(score ~ method, data = data_6)
+
+
+
+##### Part f
+
+# Finish up later
+
+
+
+
+##### Part g
+
+# Finish up later
+
+
+
+
+########## Problem 7
 
 
 
