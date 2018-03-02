@@ -176,22 +176,7 @@ pairwiseCI(value ~ type, data = data_1, conf.level = 0.99)
 
 
 
-##### Part a (from HW #1, Problem 6)
-
-# n = bt = # of observations
-# (tn)! / (n!)^t
-
-
-
-##### Part b
-
-# (bt)! because there are bt total "slots" open for assignment
-
-
-
-##### Part c
-
-# ((bt)!)^2 because we are basically doing the same assignment twice, one for each factor
+# See hand-written...
 
 
 
@@ -202,9 +187,7 @@ pairwiseCI(value ~ type, data = data_1, conf.level = 0.99)
 # n = bt = 20
 
 # 1) For each column (block), starting with the first, randomly permute t_1 to t_5 (representing treatments) without replacement and assign them to the cells in the order specified.
-# 2) Now I have a 5x4 table with the treatment types assigned to each cell
-# 3) For our first data row (t_1 to t_5), randomly select a block and enter the data into each cell matching the treatment designated from step 1
-# 4) Complete this process until all cells have data in them
+# 2) Now I have a 5x4 table with the treatment types assigned to each cell randomly. The rows represent the subjects and the columns represent the blocks.
 
 
 
