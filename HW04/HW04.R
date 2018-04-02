@@ -4,6 +4,11 @@
 
 library(lme4)
 
+## For later use
+
+# options(contrasts = rep("contr.treatment", 2))
+# options(contrasts = rep("contr.sum", 2))
+
 
 
 ########## Problem 1 ##########
@@ -23,13 +28,17 @@ data_1a$value <- c(data_1$doc1, data_1$doc2, data_1$doc3)
 mu_doc <- mean(data_1a$value)
 
 lm_1a <- lm(value ~ doctor, data = data_1a)
+# lm_1a <- lm(value ~ doctor, data = data_1a, contrasts = list(doctor = contr.sum))
 anova(lm_1a)
 summary(lm_1a)
 
 sigma_alpha_1a <- (248.163 - 1.784) / 15
 sigma_epsilon_1a <- 1.784
-se_mu_hat_1a <- sqrt((sigma_epsilon_1a + (15 * sigma_alpha_1a)) / 45)
-ci_mu_hat_1a <- c(mu_doc - qt(0.975, df = 2) * se_mu_hat_1a, mu_doc + qt(0.975, df = 2) * se_mu_hat_1a)
+# For standard error, check against results from model fit by contra-sum
+se_mu_hat_1a <- sqrt(sigma_epsilon_1a / 45)
+# For confidence interval, check against results from model fit by contra-sum
+ci_mu_hat_1a <- confint(lm_1a)
+# c(mu_doc - qt(0.975, df = 42) * se_mu_hat_1a, mu_doc + qt(0.975, df = 42) * se_mu_hat_1a)
 
 ##### Part b #####
 
@@ -39,7 +48,7 @@ summary(lm_1b)
 sigma_alpha_1b <- 10.911
 sigma_epsilon_1b <- 1.784
 se_mu_hat_1b <- sqrt((sigma_epsilon_1b + (15 * sigma_alpha_1b)) / 45)
-ci_mu_hat_1b <- c(mu_doc - qt(0.975, df = 2) * se_mu_hat_1b, mu_doc + qt(0.975, df = 2) * se_mu_hat_1b)
+ci_mu_hat_1b <- confint(lm_1b)
 
 ##### Part c #####
 
@@ -49,14 +58,16 @@ summary(lm_1c)
 sigma_alpha_1c <- 16.425
 sigma_epsilon_1c <- 1.784
 se_mu_hat_1c <- sqrt((sigma_epsilon_1c + (15 * sigma_alpha_1c)) / 45)
-ci_mu_hat_1c <- c(mu_doc - qt(0.975, df = 2) * se_mu_hat_1c, mu_doc + qt(0.975, df = 2) * se_mu_hat_1c)
+ci_mu_hat_1c <- confint(lm_1c)
 
 ##### Part d #####
 
-# Results for 1a and 1c almost identical
-# 1a and 1c are biased, 1b is unbiased
-# 1b the CI is much tighter (higer accuracy) then other two
-# Prefer 1b for the above reasons
+# All of the methods have the same sigma_square_epsilon
+# ANOVA and REML have the same sigma_square_alpha of 16.425, while the ML method's is 10.911
+# ANOVA has smallest SE of mu_hat at 0.1991, ML is next smallest at 1.917 and REML is the largest at 2.348
+# The CI for ANOVA is the tightest by far, where REML and ML are the same and much wider
+# 1a and 1c are biased estimators, 1b is unbiased unbiased
+# I prefer 1b (the REML method) because the estimators are unbiased
 
 ##### Part e #####
 
@@ -69,14 +80,18 @@ mu_dev <- mean(data_1e$value)
 ## ANOVA
 
 lm_1e_anova <- lm(value ~ device, data = data_1e)
+# lm_1e_anova <- lm(value ~ device, data = data_1e, contrasts = list(device = contr.sum))
 anova(lm_1e_anova)
 summary(lm_1e_anova)
 
 sigma_alpha_1e_anova <- (0.007 - 88.082) / 15
 sigma_alpha_1e_anova <- 0
 sigma_epsilon_1e_anova <- 88.082
+# For standard error, check against results from model fit by contra-sum
 se_mu_hat_1e_anova <- sqrt((sigma_epsilon_1e_anova + (15 * sigma_alpha_1e_anova)) / 45)
-ci_mu_hat_1e_anova <- c(mu_dev - qt(0.975, df = 42) * se_mu_hat_1e_anova, mu_dev + qt(0.975, df = 42) * se_mu_hat_1e_anova)
+# For confidence interval, check against results from model fit by contra-sum
+ci_mu_hat_1e_anova <- confint(lm_1e_anova)
+# c(mu_dev - qt(0.975, df = 42) * se_mu_hat_1e_anova, mu_dev + qt(0.975, df = 42) * se_mu_hat_1e_anova)
 
 ## ML
 
@@ -86,7 +101,7 @@ summary(lm_1e_ml)
 sigma_alpha_1e_ml <- 0
 sigma_epsilon_1e_ml <- 82.21
 se_mu_hat_1e_ml <- sqrt((sigma_epsilon_1e_ml + (15 * sigma_alpha_1e_ml)) / 45)
-ci_mu_hat_1e_ml <- c(mu_dev - qt(0.975, df = 2) * se_mu_hat_1e_ml, mu_dev + qt(0.975, df = 2) * se_mu_hat_1e_ml)
+ci_mu_hat_1e_ml <- confint(lm_1e_ml)
 
 ## REML
 
@@ -96,7 +111,16 @@ summary(lm_1e_reml)
 sigma_alpha_1e_reml <- 0
 sigma_epsilon_1e_reml <- 84.08
 se_mu_hat_1e_reml <- sqrt((sigma_epsilon_1e_reml + (15 * sigma_alpha_1e_reml)) / 45)
-ci_mu_hat_1e_reml <- c(mu_dev - qt(0.975, df = 2) * se_mu_hat_1e_reml, mu_dev + qt(0.975, df = 2) * se_mu_hat_1e_reml)
+ci_mu_hat_1e_reml <- confint(lm_1e_reml)
+
+## Results Comparison
+
+# The largest sigma_square_epsilon is from ANOVA with 88.082, followed by REML with 84.08 and finally ML with 82.21
+# ANOVA, ML and REML all have a sigma_square_alpha of 0
+# ML has smallest SE of mu_hat at 1.352, REML is next smallest at 1.367 and ANOVA is the largest at 1.399
+# All of the CIs are about equally as tight, where REML and ML are the same again
+# 1a and 1c are biased estimators, 1b is unbiased unbiased
+# I prefer 1b (the REML method) because the estimators are unbiased
 
 
 
@@ -125,9 +149,13 @@ qqline(resid(lm_interact_2), col = "red")
 
 ## Summary
 
-# Blah blah
-# Blah blah
-# Blah blah
+# Significant Location p-values: Ground, Lower, Middle
+# Significant Trap p-values: None
+# Significant Interaction p-values: None
+# Based on ANOVA Table, Location is significant and a large portion of the variance is explained by Location
+# Based on ANOVA Table, an even larger amount of the variance is explained by the error component
+# The confidence interval is wider when incorporating interaction affects, accounting for increased uncertainty
+# According to our diagnostic plots, residuals are approximately normal and have equal variance
 
 ## No interaction effects model
 
@@ -146,9 +174,12 @@ qqline(resid(lm_no_interact_2), col = "red")
 
 ## Summary
 
-# Blah blah
-# Blah blah
-# Blah blah
+# Significant Location p-values: Ground, Lower, Middle
+# Significant Trap p-values: None
+# Based on ANOVA Table, Location is significant and a large portion of the variance is explained by Location
+# Based on ANOVA Table, an even larger amount of the variance is explained by the error component
+# The confidence interval is tighter when ignoring interaction affects, accounting for decreased uncertainty
+# According to our diagnostic plots, residuals are approximately normal and have equal variance
 
 
 
