@@ -198,7 +198,8 @@ df_3 <- data.frame(part, oper, value)
 
 ##### Part a #####
 
-## format(scientific_value, scientific = FALSE)
+# format(scientific_value, scientific = FALSE)
+format((0.0000005838 - sigma_oper_part_3a) / (10 * 3), scientific = FALSE)
 
 lm_3a <- lm(value ~ oper + part + (oper * part), data = df_3)
 summary(lm_3a)
@@ -219,32 +220,33 @@ sigma_oper_3a <- (0.0000046167 - sigma_oper_part_3a) / (10 * 10)
 lm_3b_ml <- lmer(value ~ (1|oper) + (1|part) + (1|(oper:part)), data = df_3, REML = FALSE)
 summary(lm_3b_ml)
 
-sigma_epsilon_3b_ml <- 0.000658
-sigma_oper_part_3b_ml <- (0.0000000007321 - sigma_epsilon_3b_ml) / 10
-sigma_oper_part_3b_ml <- 0
-sigma_part_3b_ml <- (0.001312 - sigma_oper_part_3b_ml) / (10 * 3)
-sigma_oper_3b_ml <- (0.0004251 - sigma_oper_part_3b_ml) / (10 * 10)
+sigma_epsilon_3b_ml <- 0.0000004329
+sigma_oper_part_3b_ml <- 0.000000000000000000536
+# sigma_oper_part_3b_ml <- 0
+sigma_part_3b_ml <- 0.000001722
+sigma_oper_3b_ml <- 0.0000001807
 
 ## REML
 
 lm_3b_reml <- lmer(value ~ (1|oper) + (1|part) + (1|(oper:part)), data = df_3, REML = TRUE)
 summary(lm_3b_reml)
 
-sigma_epsilon_3b_reml <- 0.0006578
-sigma_oper_part_3b_reml <- (0 - sigma_epsilon_3b_reml) / 10
+sigma_epsilon_3b_reml <- 0.0000004326
 sigma_oper_part_3b_reml <- 0
-sigma_part_3b_reml <- (0.0013679 - sigma_oper_part_3b_reml) / (10 * 3)
-sigma_oper_3b_reml <- (0.0004574 - sigma_oper_part_3b_reml) / (10 * 10)
+# sigma_oper_part_3b_reml <- 0
+sigma_part_3b_reml <- 0.000001871
+sigma_oper_3b_reml <- 0.0000002092
 
 ## Comparisons
 
-# The variance of the interact effect are 0 for all methods
-# The sigma estimate for oper and part is close between ML and REML but much smaller for ANOVA
+# The sigma_square_epsilon are extremely small in all cases, however largest with ANOVA and approximately equal with ML and REML
+# The estimates for sigma_square_interact is approximately 0 in all cases
+# And again with variance estimates for oper and part, they are all extremely small and approximately 0
 # Again, we know the ANOVA and ML are biased, while REML is unbiased
 
 ##### Part c #####
 
-# According to the ANOVA table from Part a, there are no significant sources of variation; all F values are ~1.
+# According to the ANOVA table from Part a, there are no significant sources of variation; all p-values (based on F-statistics) are > 0.05
 
 
 
