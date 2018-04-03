@@ -270,7 +270,20 @@ summary(lm_4a)
 
 # Due the p-value of 0.2025, I will not reject my null hypothesis that two samples are equal.
 
+##### Part b #####
 
+df_4b <- setNames(data.frame(matrix(NA, ncol = 3, nrow = 20)), c("treatment", "decrease", "initial"))
+df_4b$treatment <- c(rep("A", times = 10), rep("B", 10))
+df_4b$decrease <- c(data_4[, 3], data_4[, 6])
+df_4b$initial <- c(data_4[, 2], data_4[, 5])
+
+lm_4b <- lm(decrease ~ treatment * initial, data = df_4b)
+anova(lm_4b)
+summary(lm_4b)
+
+##### Part c #####
+
+# I prefer the results from Part b because the ANOVA table from Part b tells us that the initial weight is significant
 
 
 
