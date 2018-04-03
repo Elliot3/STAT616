@@ -27,8 +27,6 @@ data_1 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW04/blood.c
 
 ## Part a
 
-### ANOVA Table
-
 ```{r, echo = FALSE}
 
 data_1a <- setNames(data.frame(matrix(NA, ncol = 2, nrow = 45)), c("doctor", "value"))
@@ -39,7 +37,7 @@ mu_doc <- mean(data_1a$value)
 
 lm_1a <- lm(value ~ doctor, data = data_1a)
 # lm_1a <- lm(value ~ doctor, data = data_1a, contrasts = list(doctor = contr.sum))
-anova(lm_1a)
+# anova(lm_1a)
 # summary(lm_1a)
 
 sigma_alpha_1a <- (248.163 - 1.784) / 15
@@ -47,7 +45,7 @@ sigma_epsilon_1a <- 1.784
 # For standard error, check against results from model fit by contra-sum
 se_mu_hat_1a <- sqrt(sigma_epsilon_1a / 45)
 # For confidence interval, check against results from model fit by contra-sum
-ci_mu_hat_1a <- confint(lm_1a)
+# ci_mu_hat_1a <- confint(lm_1a)
 # c(mu_doc - qt(0.975, df = 42) * se_mu_hat_1a, mu_doc + qt(0.975, df = 42) * se_mu_hat_1a)
 
 ```
@@ -61,17 +59,15 @@ ci_mu_hat_1a <- confint(lm_1a)
 
 ## Part b
 
-### LM Summary
-
 ```{r, echo = FALSE}
 
 lm_1b <- lmer(value ~ (1|doctor), data = data_1a, REML = FALSE)
-summary(lm_1b)
+# summary(lm_1b)
 
 sigma_alpha_1b <- 10.911
 sigma_epsilon_1b <- 1.784
 se_mu_hat_1b <- sqrt((sigma_epsilon_1b + (15 * sigma_alpha_1b)) / 45)
-ci_mu_hat_1b <- confint(lm_1b)
+# ci_mu_hat_1b <- confint(lm_1b)
 
 ```
 
@@ -84,17 +80,15 @@ ci_mu_hat_1b <- confint(lm_1b)
 
 ## Part c
 
-### LM Summary
-
 ```{r, echo = FALSE}
 
 lm_1c <- lmer(value ~ (1|doctor), data = data_1a, REML = TRUE)
-summary(lm_1c)
+# summary(lm_1c)
 
 sigma_alpha_1c <- 16.425
 sigma_epsilon_1c <- 1.784
 se_mu_hat_1c <- sqrt((sigma_epsilon_1c + (15 * sigma_alpha_1c)) / 45)
-ci_mu_hat_1c <- confint(lm_1c)
+# ci_mu_hat_1c <- confint(lm_1c)
 
 ```
 
@@ -116,8 +110,6 @@ ci_mu_hat_1c <- confint(lm_1c)
 
 ## Part e - ANOVA Method
 
-### ANOVA Table
-
 ```{r, echo = FALSE}
 
 data_1e <- setNames(data.frame(matrix(NA, ncol = 2, nrow = 45)), c("device", "value"))
@@ -130,7 +122,7 @@ mu_dev <- mean(data_1e$value)
 
 lm_1e_anova <- lm(value ~ device, data = data_1e)
 # lm_1e_anova <- lm(value ~ device, data = data_1e, contrasts = list(device = contr.sum))
-anova(lm_1e_anova)
+# anova(lm_1e_anova)
 # summary(lm_1e_anova)
 
 sigma_alpha_1e_anova <- (0.007 - 88.082) / 15
@@ -139,7 +131,7 @@ sigma_epsilon_1e_anova <- 88.082
 # For standard error, check against results from model fit by contra-sum
 se_mu_hat_1e_anova <- sqrt((sigma_epsilon_1e_anova + (15 * sigma_alpha_1e_anova)) / 45)
 # For confidence interval, check against results from model fit by contra-sum
-ci_mu_hat_1e_anova <- confint(lm_1e_anova)
+# ci_mu_hat_1e_anova <- confint(lm_1e_anova)
 # c(mu_dev - qt(0.975, df = 42) * se_mu_hat_1e_anova, mu_dev + qt(0.975, df = 42) * se_mu_hat_1e_anova)
 
 ```
@@ -153,19 +145,17 @@ ci_mu_hat_1e_anova <- confint(lm_1e_anova)
 
 ## Part e - LM Method
 
-### LM Summary
-
 ```{r, echo = FALSE}
 
 ## ML
 
-lm_1e_ml <- lmer(value ~ (1|device), data = data_1e, REML = FALSE)
-summary(lm_1e_ml)
+lm_1e_ml <- suppressWarnings(lmer(value ~ (1|device), data = data_1e, REML = FALSE))
+# summary(lm_1e_ml)
 
 sigma_alpha_1e_ml <- 0
 sigma_epsilon_1e_ml <- 82.21
 se_mu_hat_1e_ml <- sqrt((sigma_epsilon_1e_ml + (15 * sigma_alpha_1e_ml)) / 45)
-ci_mu_hat_1e_ml <- confint(lm_1e_ml)
+# ci_mu_hat_1e_ml <- confint(lm_1e_ml)
 
 ```
 
@@ -178,19 +168,17 @@ ci_mu_hat_1e_ml <- confint(lm_1e_ml)
 
 ## Part e - REML Method
 
-### LM Summary
-
 ```{r, echo = FALSE}
 
 ## REML
 
-lm_1e_reml <- lmer(value ~ (1|device), data = data_1e, REML = TRUE)
-summary(lm_1e_reml)
+lm_1e_reml <- suppressWarnings(lmer(value ~ (1|device), data = data_1e, REML = TRUE))
+# summary(lm_1e_reml)
 
 sigma_alpha_1e_reml <- 0
 sigma_epsilon_1e_reml <- 84.08
 se_mu_hat_1e_reml <- sqrt((sigma_epsilon_1e_reml + (15 * sigma_alpha_1e_reml)) / 45)
-ci_mu_hat_1e_reml <- confint(lm_1e_reml)
+# ci_mu_hat_1e_reml <- confint(lm_1e_reml)
 
 ```
 
@@ -211,6 +199,117 @@ ci_mu_hat_1e_reml <- confint(lm_1e_reml)
 * I prefer the REML method because the estimators are unbiased
 
 # Problem 2
+
+## Interaction Effects
+
+```{r, echo = FALSE}
+
+## Load in the data
+
+data_2 <- read.table("~/Documents/Rice_University/Spring_2018/STAT616/HW04/moth.txt", header = TRUE)
+
+## Interaction effects model
+
+lm_interact_2 <- lm(count ~ location + trap + (location * trap), data = data_2)
+# summary(lm_interact_2)
+# anova(lm_interact_2)
+# confint(lm_interact_2)
+
+```
+
+### Diagnostics
+
+```{r, echo = FALSE}
+
+## Diagnostics
+
+plot(resid(lm_interact_2), xlab = "Index", ylab = "Residual Value", main = "Homoscedasticity of Residuals")
+abline(h = 0, col = "red")
+
+qqnorm(resid(lm_interact_2), main = "Residual QQ Plot")
+qqline(resid(lm_interact_2), col = "red")
+
+```
+
+### Summary
+
+* Significant Location p-values: Ground, Lower, Middle
+* Significant Trap p-values: None
+* Significant Interaction p-values: None
+* Based on ANOVA Table, Location is significant and a large portion of the variance is explained by Location
+* Based on ANOVA Table, an even larger amount of the variance is explained by the error component
+* The confidence interval is wider when incorporating interaction affects, accounting for increased uncertainty
+* According to our diagnostic plots, residuals are approximately normal and have equal variance
+
+### ANOVA Table
+
+```{r, echo = FALSE}
+
+anova(lm_interact_2)
+
+```
+
+## No Interaction Effects
+
+```{r, echo = FALSE}
+
+## No interaction effects model
+
+lm_no_interact_2 <- lm(count ~ location + trap, data = data_2)
+# summary(lm_no_interact_2)
+# anova(lm_no_interact_2)
+# confint(lm_no_interact_2)
+
+```
+
+### Diagnostics
+
+```{r, echo = FALSE}
+
+## Diagnostics
+
+plot(resid(lm_no_interact_2), xlab = "Index", ylab = "Residual Value", main = "Homoscedasticity of Residuals")
+abline(h = 0, col = "red")
+
+qqnorm(resid(lm_no_interact_2), main = "Residual QQ Plot")
+qqline(resid(lm_no_interact_2), col = "red")
+
+```
+
+### Summary
+
+* Significant Location p-values: Ground, Lower, Middle
+* Significant Trap p-values: None
+* Based on ANOVA Table, Location is significant and a large portion of the variance is explained by Location
+* Based on ANOVA Table, an even larger amount of the variance is explained by the error component
+* The confidence interval is tighter when ignoring interaction affects, accounting for decreased uncertainty
+* According to our diagnostic plots, residuals are approximately normal and have equal variance
+
+### ANOVA Table
+
+```{r, echo = FALSE}
+
+anova(lm_no_interact_2)
+
+```
+
+# Problem 3
+
+## Part a
+
+## Part b
+
+## Part c
+
+# Problem 4
+
+## Part a
+
+## Part b
+
+## Part c
+
+# Code Appendix
 
 
 
