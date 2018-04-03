@@ -1,0 +1,221 @@
+---
+title: "HW04"
+author: "Elliot Smith"
+date: "4/2/2018"
+output: pdf_document
+---
+
+```{r, echo = FALSE}
+
+## Load in the necessary libraries
+
+suppressMessages(
+    library(lme4)
+)
+
+```
+
+# Problem 1
+
+```{r, echo = FALSE}
+
+## Load in the data
+
+data_1 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW04/blood.csv")
+
+```
+
+## Part a
+
+### ANOVA Table
+
+```{r, echo = FALSE}
+
+data_1a <- setNames(data.frame(matrix(NA, ncol = 2, nrow = 45)), c("doctor", "value"))
+data_1a$doctor <- c(rep("doc1", times = 15), rep("doc2", times = 15), rep("doc3", times = 15))
+data_1a$value <- c(data_1$doc1, data_1$doc2, data_1$doc3)
+
+mu_doc <- mean(data_1a$value)
+
+lm_1a <- lm(value ~ doctor, data = data_1a)
+# lm_1a <- lm(value ~ doctor, data = data_1a, contrasts = list(doctor = contr.sum))
+anova(lm_1a)
+# summary(lm_1a)
+
+sigma_alpha_1a <- (248.163 - 1.784) / 15
+sigma_epsilon_1a <- 1.784
+# For standard error, check against results from model fit by contra-sum
+se_mu_hat_1a <- sqrt(sigma_epsilon_1a / 45)
+# For confidence interval, check against results from model fit by contra-sum
+ci_mu_hat_1a <- confint(lm_1a)
+# c(mu_doc - qt(0.975, df = 42) * se_mu_hat_1a, mu_doc + qt(0.975, df = 42) * se_mu_hat_1a)
+
+```
+
+### Estimates
+
+* $\sigma_\epsilon^2 = 1.784$
+* $\sigma_\alpha^2 = \frac{248.163 - 1.784}{15} = 16.42527$
+* $SE(\hat\mu) = \sqrt{\frac{\sigma_\epsilon^2}{45}} = 0.1991091$
+* Confidence Interval = $[129.6195, 130.4232]$
+
+## Part b
+
+### LM Summary
+
+```{r, echo = FALSE}
+
+lm_1b <- lmer(value ~ (1|doctor), data = data_1a, REML = FALSE)
+summary(lm_1b)
+
+sigma_alpha_1b <- 10.911
+sigma_epsilon_1b <- 1.784
+se_mu_hat_1b <- sqrt((sigma_epsilon_1b + (15 * sigma_alpha_1b)) / 45)
+ci_mu_hat_1b <- confint(lm_1b)
+
+```
+
+### Estimates
+
+* $\sigma_\epsilon^2 = 1.784$
+* $\sigma_\alpha^2 = 10.911$
+* $SE(\hat\mu) = \sqrt{\frac{\sigma_\epsilon^2 + 15\sigma_\alpha^2}{45}} = 1.917458$
+* Confidence Interval = $[124.668177, 135.374484]$
+
+## Part c
+
+### LM Summary
+
+```{r, echo = FALSE}
+
+lm_1c <- lmer(value ~ (1|doctor), data = data_1a, REML = TRUE)
+summary(lm_1c)
+
+sigma_alpha_1c <- 16.425
+sigma_epsilon_1c <- 1.784
+se_mu_hat_1c <- sqrt((sigma_epsilon_1c + (15 * sigma_alpha_1c)) / 45)
+ci_mu_hat_1c <- confint(lm_1c)
+
+```
+
+### Estimates
+
+* $\sigma_\epsilon^2 = 1.784$
+* $\sigma_\alpha^2 = 16.425$
+* $SE(\hat\mu) = \sqrt{\frac{\sigma_\epsilon^2 + 15\sigma_\alpha^2}{45}} = 2.348328$
+* Confidence Interval = $[124.668177, 135.374484]$
+
+## Part d
+
+* All of the methods have the same $\sigma_\epsilon^2$
+* ANOVA and REML have the same $\sigma_\alpha^2$ of 16.425, while the ML method's is 10.911
+* ANOVA has smallest $SE(\hat\mu)$ at 0.1991, ML is next smallest at 1.917 and REML is the largest at 2.348
+* The Confidence Interval for ANOVA is the tightest by far, where REML and ML are the same and much wider
+* 1a and 1c are biased estimators, 1b estimators are unbiases
+* I prefer 1b (the REML method) because the estimators are unbiased
+
+## Part e - ANOVA Method
+
+### ANOVA Table
+
+```{r, echo = FALSE}
+
+data_1e <- setNames(data.frame(matrix(NA, ncol = 2, nrow = 45)), c("device", "value"))
+data_1e$device <- c(rep("dev1", times = 15), rep("dev2", times = 15), rep("dev3", times = 15))
+data_1e$value <- c(data_1$dev1, data_1$dev2, data_1$dev3)
+
+mu_dev <- mean(data_1e$value)
+
+## ANOVA
+
+lm_1e_anova <- lm(value ~ device, data = data_1e)
+# lm_1e_anova <- lm(value ~ device, data = data_1e, contrasts = list(device = contr.sum))
+anova(lm_1e_anova)
+# summary(lm_1e_anova)
+
+sigma_alpha_1e_anova <- (0.007 - 88.082) / 15
+sigma_alpha_1e_anova <- 0
+sigma_epsilon_1e_anova <- 88.082
+# For standard error, check against results from model fit by contra-sum
+se_mu_hat_1e_anova <- sqrt((sigma_epsilon_1e_anova + (15 * sigma_alpha_1e_anova)) / 45)
+# For confidence interval, check against results from model fit by contra-sum
+ci_mu_hat_1e_anova <- confint(lm_1e_anova)
+# c(mu_dev - qt(0.975, df = 42) * se_mu_hat_1e_anova, mu_dev + qt(0.975, df = 42) * se_mu_hat_1e_anova)
+
+```
+
+### Estimates
+
+* $\sigma_\epsilon^2 = 88.082$
+* $\sigma_\alpha^2 = \frac{0.007 - 88.082}{15} = -5.871667 = 0$
+* $SE(\hat\mu) = \sqrt{\frac{\sigma_\epsilon^2}{45}} = 1.399063$
+* Confidence Interval = $[125.243023, 130.889866]$
+
+## Part e - LM Method
+
+### LM Summary
+
+```{r, echo = FALSE}
+
+## ML
+
+lm_1e_ml <- lmer(value ~ (1|device), data = data_1e, REML = FALSE)
+summary(lm_1e_ml)
+
+sigma_alpha_1e_ml <- 0
+sigma_epsilon_1e_ml <- 82.21
+se_mu_hat_1e_ml <- sqrt((sigma_epsilon_1e_ml + (15 * sigma_alpha_1e_ml)) / 45)
+ci_mu_hat_1e_ml <- confint(lm_1e_ml)
+
+```
+
+### Estimates
+
+* $\sigma_\epsilon^2 = 82.21$
+* $\sigma_\alpha^2 = 0$
+* $SE(\hat\mu) = \sqrt{\frac{\sigma_\epsilon^2 + 15\sigma_\alpha^2}{45}} = 1.351625$
+* Confidence Interval = $[125.359749, 130.773140]$
+
+## Part e - REML Method
+
+### LM Summary
+
+```{r, echo = FALSE}
+
+## REML
+
+lm_1e_reml <- lmer(value ~ (1|device), data = data_1e, REML = TRUE)
+summary(lm_1e_reml)
+
+sigma_alpha_1e_reml <- 0
+sigma_epsilon_1e_reml <- 84.08
+se_mu_hat_1e_reml <- sqrt((sigma_epsilon_1e_reml + (15 * sigma_alpha_1e_reml)) / 45)
+ci_mu_hat_1e_reml <- confint(lm_1e_reml)
+
+```
+
+### Estimates
+
+* $\sigma_\epsilon^2 = 84.08$
+* $\sigma_\alpha^2 = 0$
+* $SE(\hat\mu) = \sqrt{\frac{\sigma_\epsilon^2 + 15\sigma_\alpha^2}{45}} = 1.366911$
+* Confidence Interval = $[125.359749, 130.773140]$
+
+## Part e - Results Comparison
+
+* The largest $\sigma_\epsilon^2$ is from ANOVA with 88.082, followed by REML with 84.08 and finally ML with 82.21
+* ANOVA, ML and REML all have a $\sigma_\alpha^2$ of 0
+* ML has smallest $SE(\hat\mu)$ at 1.352, REML is next smallest at 1.367 and ANOVA is the largest at 1.399
+* All of the Confidence Intervals are about equally as tight, where REML and ML are the same again
+* ANOVA and ML are biased estimators, REML estimators are unbiased
+* I prefer the REML method because the estimators are unbiased
+
+# Problem 2
+
+
+
+
+
+
+
+
