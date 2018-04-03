@@ -199,17 +199,17 @@ df_3 <- data.frame(part, oper, value)
 ##### Part a #####
 
 # format(scientific_value, scientific = FALSE)
-format((0.0000005838 - sigma_oper_part_3a) / (10 * 3), scientific = FALSE)
+format(9.73e-08, scientific = FALSE)
 
 lm_3a <- lm(value ~ oper + part + (oper * part), data = df_3)
 summary(lm_3a)
 anova(lm_3a)
 
 sigma_epsilon_3a <- 0.0000022797
-sigma_oper_part_3a <- (0.0000010066 - sigma_epsilon_3a) / 10
+sigma_oper_part_3a <- (0.0000010066 - sigma_epsilon_3a) / 2
 sigma_oper_part_3a <- 0
-sigma_part_3a <- (0.0000005838 - sigma_oper_part_3a) / (10 * 3)
-sigma_oper_3a <- (0.0000046167 - sigma_oper_part_3a) / (10 * 10)
+sigma_part_3a <- (0.0000005838 - sigma_oper_part_3a) / (2 * 3)
+sigma_oper_3a <- (0.0000046167 - sigma_oper_part_3a) / (2 * 10)
 
 # We can get valid estimates from the ANOVA table because we have balance!
 
@@ -277,7 +277,7 @@ df_4b$treatment <- c(rep("A", times = 10), rep("B", 10))
 df_4b$decrease <- c(data_4[, 3], data_4[, 6])
 df_4b$initial <- c(data_4[, 2], data_4[, 5])
 
-lm_4b <- lm(decrease ~ treatment * initial, data = df_4b)
+lm_4b <- lm(decrease ~ treatment + initial, data = df_4b)
 anova(lm_4b)
 summary(lm_4b)
 
