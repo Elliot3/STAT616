@@ -313,7 +313,7 @@ df_3 <- data.frame(part, oper, value)
 ```{r, echo = FALSE}
 
 lm_3a <- lm(value ~ oper + part + (oper * part), data = df_3)
-summary(lm_3a)
+# summary(lm_3a)
 anova(lm_3a)
 
 ```
