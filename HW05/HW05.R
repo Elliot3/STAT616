@@ -8,10 +8,6 @@
 
 data <- c(2, 5, 5, 5, 2, 4, 4, 9, 5, 10, 6, 8, 7, 5, 4, 5, 3, 5, 6, 6, 3, 5, 2, 7, 10, 7, 6)
 
-## Load in functions and packages
-
-std_err <- function(x) sd(x)/sqrt(length(x))
-
 ## Set some data parameters
 
 B <- 500
@@ -30,6 +26,10 @@ sqrt(mean(data))
 
 
 
+## Calculate x_bar
+
+x_bar <- mean(data)
+
 ## Containers for statistics
 
 sim_SD_1b <- numeric()
@@ -39,7 +39,7 @@ sim_sqrt_1b <- numeric()
 
 for (i in 1:B) {
     
-    temp <- rpois(n = n, lambda = 5)
+    temp <- rpois(n = n, lambda = x_bar)
     sim_SD_1b[i] <- sd(temp)
     sim_sqrt_1b[i] <- sqrt(mean(temp))
     
@@ -47,10 +47,10 @@ for (i in 1:B) {
 
 ## Harvest the standard errors of the results
 
-se_SD_1b <- std_err(sim_SD_1b)
-se_sqrt_1b <- std_err(sim_sqrt_1b)
+se_SD_1b <- sqrt((1/(n - 1))*sum((sim_SD_1b - mean(sim_SD_1b))^2))
+se_sqrt_1b <- sqrt((1/(n - 1))*sum((sim_sqrt_1b - mean(sim_sqrt_1b))^2))
 
-# I prefer sqrt(mean(X)) method because it has a tighter bound and thus is more accurate/precise
+# I prefer sqrt(mean(X)) method because it has a smaller standard error and thus is more accurate/precise
 
 
 
@@ -75,10 +75,10 @@ for (i in 1:B) {
 
 ## Harvest the standard errors of the results
 
-se_SD_1c <- std_err(sim_SD_1c)
-se_sqrt_1c <- std_err(sim_sqrt_1c)
+se_SD_1c <- sqrt((1/(n - 1))*sum((sim_SD_1c - mean(sim_SD_1c))^2))
+se_sqrt_1c <- sqrt((1/(n - 1))*sum((sim_sqrt_1c - mean(sim_sqrt_1c))^2))
 
-# I prefer sqrt(mean(X)) method because it has a tighter bound and thus is more accurate/precise
+# I prefer sqrt(mean(X)) method because it has a smaller standard error and thus is more accurate/precise
 
 
 
@@ -86,8 +86,10 @@ se_sqrt_1c <- std_err(sim_sqrt_1c)
 
 
 
-# The parametric SEs are larger, implying a larger spread. I prefer the parametric method because it
-# is representative of the true distribution, not a sample-based estimate of the true distribution.
+# The parametric SEs are larger, implying a larger spread. Normally, I would prefer the method that
+# results in the smaller standard error, however, I prefer the parametric method because it
+# is representative of the true distribution, and less of a sample-based estimate of the true distribution,
+# and as such, is more close to the true distribution.
 
 
 
@@ -149,7 +151,7 @@ for (i in 1:B) {
 
 ## Harvest the standard errors of the results
 
-se_cc_2a <- std_err(sim_corr_2a)
+se_cc_2a <- sqrt((1/(n - 1))*sum((sim_corr_2a - mean(sim_corr_2a))^2))
 
 
 
@@ -196,7 +198,7 @@ for (i in 1:B) {
 
 ## Harvest the standard errors of the results
 
-se_cc_2b <- std_err(sim_corr_2b)
+se_cc_2b <- sqrt((1/(n - 1))*sum((sim_corr_2b - mean(sim_corr_2b))^2))
 
 
 
@@ -243,7 +245,7 @@ for (i in 1:B) {
 
 ## Harvest the standard errors of the results
 
-se_cc_2c <- std_err(sim_corr_2c)
+se_cc_2c <- sqrt((1/(n - 1))*sum((sim_corr_2c - mean(sim_corr_2c))^2))
 
 
 
@@ -251,18 +253,57 @@ se_cc_2c <- std_err(sim_corr_2c)
 
 
 
-# The standard errors for the correlation coefficients are very similar with the A schools
-# at 0.005 and the B schools at 0.004 showing that they have similar variation.
+# The standard error for the correlation coefficient for the A schools is 0.3069, while the
+# standard error for the correlation coefficient for the B schools is 0.1336. This shows that
+# the data is much more spread for A schools as compared to C schools. The correlation
+# coefficient for the A schools is 0.2923, while the correlation coefficient for the C schools
+# is -0.1192. The shows that there is a marginally positive relationship between percent of
+# students taking the SAT and the average score, while there is almost no relationship (though
+# what is there is marginally negative) for the C schools.
 
 # I think the correlation signs are different because in C schools, we may infer that most
-# of the students are not good students, so if more students take the exam, the average grade
-# will drop. With the A schools we have the opposite affect.
+# of the students are not good students, but the good students there will still take the exam.
+# If more students are encouraged to take the exam, we can infer that they will not be as good
+# students as those that have already taken the exam at poor schools. At A schools, we may infer
+# that there are a larger pool of strong students, so as schools have more test-takers, we can
+# hypothesize that they will be stronger students.
 
 
 
 ##### Part e #####
 
 
+
+## Containers for statistics
+
+sim_med_2e_a <- numeric()
+sim_med_2e_c <- numeric()
+
+## Perform the simulation for the A and C schools
+
+for (i in 1:B) {
+    
+    temp_a <- median(sample(x = data_2b$avesat, size = length(data_2b$avesat), replace = TRUE))
+    temp_c <- median(sample(x = data_2c$avesat, size = length(data_2c$avesat), replace = TRUE))
+    
+    sim_med_2e_a[i] <- temp_a
+    sim_med_2e_c[i] <- temp_c
+    
+}
+
+## Build the confidence intervals
+
+t.test(sim_med_2e_a)
+t.test(sim_med_2e_c)
+
+# As we can see from the confidence intervals supplied by t.test, there is a significant difference
+# in the medians between A schools and C schools.
+
+
+
+
+
+########## Problem 3 ##########
 
 
 
