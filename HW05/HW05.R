@@ -251,7 +251,20 @@ se_cc_2c <- std_err(sim_corr_2c)
 
 
 
-# 
+# The standard errors for the correlation coefficients are very similar with the A schools
+# at 0.005 and the B schools at 0.004 showing that they have similar variation.
+
+# I think the correlation signs are different because in C schools, we may infer that most
+# of the students are not good students, so if more students take the exam, the average grade
+# will drop. With the A schools we have the opposite affect.
+
+
+
+##### Part e #####
+
+
+
+
 
 
 
