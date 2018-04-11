@@ -308,6 +308,22 @@ t.test(sim_med_2e_c)
 
 
 
+## Read in the data
+
+data_3 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW05/lutenize.csv")$level
+
+## Calculate the average
+
+mu_3 <- mean(data_3)
+
+## Center the data
+
+z <- data_3 - mu_3
+
+
+
+
+
 
 
 
