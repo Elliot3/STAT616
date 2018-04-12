@@ -1,3 +1,100 @@
+---
+title: 'STAT616 - HW #5'
+author: "Elliot Smith"
+date: "4/12/2018"
+output: pdf_document
+---
+
+```{r, echo = FALSE}
+
+library(png)
+library(grid)
+
+```
+
+# Problem 1
+
+## Part a
+
+* Sample SD = 2.188418
+* $\sqrt{\bar{X}}$ = 2.325383
+* The Poisson distribution is described by one parameter, $\lambda$, which represents both the Mean and Variance (EX and VarX, respectively). So in the case of the Poisson distribution, taking the SD of a sample and taking the square root of the mean will both yield $\sqrt{\lambda}$
+
+## Part b
+
+* Standard Error of Sample SD: 1.458007
+* Standard Error of $\sqrt{\bar{X}}$: 0.4000194
+* I prefer the estimate of $\sqrt{\bar{X}}$ because it is a smaller standard error, thus telling us that the estimate is more precise than the other estimate.
+
+## Part c
+
+* Standard Error of Sample SD: 1.228888
+* Standard Error of $\sqrt{\bar{X}}$: 0.375584
+* I again prefer the estimate of $\sqrt{\bar{X}}$ because it is a smaller standard error, thus telling us that the estimate is more precise than the other estimate.
+
+## Part d
+
+The parametric estimate standard errors are larger, implying a larger uncertainty in these estimates. Normally, I would prefer the method that result in the smaller standard error as it implies a more precise estimate, however, I prefer the parametric method because it is representative of the true distribution and less of a sample-based estimate of the true distribution, and as such, is more close to the true distribution.
+
+# Problem 2
+
+## Part a
+
+* Correlation Coefficient - avesat-pctsat: 0.1013043
+* The correlation coefficient define the degree of relation between these two variables; this value of 0.1 is a weak, positive relationship between avesat and pctsat.
+* Boot Strap Standard Error of Sample Correlation Coefficient: 0.06038997
+
+## Part b
+
+* Correlation Coefficient - avesat-pctsat: 0.3265814
+* The correlation coefficient define the degree of relation between these two variables; this value of 0.33 is a weak-to-moderate, positive relationship between avesat and pctsat.
+* Boot Strap Standard Error of Sample Correlation Coefficient: 0.3118617
+
+## Part c
+
+* Correlation Coefficient - avesat-pctsat: -0.1192082
+* The correlation coefficient define the degree of relation between these two variables; this value of -0.12 is a weak, negative relationship between avesat and pctsat.
+* Boot Strap Standard Error of Sample Correlation Coefficient: 0.1337926
+
+## Part d
+
+The standard error for the correlation coefficient for the A schools is 0.3118617, while the standard error for the correlation coefficient for the C schools is 0.1337926 This shows that the data is much more spread for A schools as compared to C schools and thus our estimators are less precise for A schools as compared to C schools. The correlation coefficient for the A schools is 0.3265814, while the correlation coefficient for the C schools is -0.1192082. The shows that there is a weak-to-moderate, positive relationship between percent of students taking the SAT and the average score for A schools, while there is almost no relationship (though what is there is a weak, negative relationship) for the C schools.
+
+I think the correlation signs are different because in C schools, we may infer that most of the students are not good students, but the good students there will still take the exam. As a higher percent of students are encouraged to take the exam, we can infer that they will not be as good students as those that have already taken the exam at the C schools. At A schools, we may infer that there are a larger pool of strong students, so as a larger percent of students are encouraged to take the test, the average score will go up as more, academically strong students take the exam.
+
+## Part e
+
+* 95% Confidence Interval - Median of Average Score between A schools and B schools: [52.25497, 52.86223]
+* Because zero is not contained in this interval (and that we generated a satisfactory number of 5000 boot strap samples) we may conclude that there is a significant difference between the median, average SAT scores of A schools and B schools.
+
+# Problem 3
+
+## Plot for $\hat{\beta}_1^*$
+
+```{r, echo = FALSE, fig.height = 4, fig.width = 4, fig.align = "center"}
+
+img <- readPNG("~/Documents/Rice_University/Spring_2018/STAT616/HW05/Prob3_Plot1.png")
+grid.raster(img)
+
+```
+
+## Plot for $\hat{\beta}_2^*$
+
+```{r, echo = FALSE, fig.height = 4, fig.width = 4, fig.align = "center"}
+
+img <- readPNG("~/Documents/Rice_University/Spring_2018/STAT616/HW05/Prob3_Plot2.png")
+grid.raster(img)
+
+```
+
+## Algorithm for Bootstrap
+
+Once we have generated our Beta estimates (as per the instructions in the Handout) we simply need to perform the simulation (sample the data with replacement) and repeat the prodedure a large number of times (in my case, 500). By performing this operation, we will generate many Beta estimates; we will use these Beta estimates to construct our Histogram and then plot the observed Beta estimates as a vertical line in their respective plots to get a contextual view of our Beta estimates as compared to our simulated results.
+
+# Code Appendix
+
+```{r, eval = FALSE}
+
 ########## Problem 1 ##########
 
 
@@ -308,36 +405,4 @@ t.test(sim_med_diff_2e)
 # As we can see from the confidence intervals supplied by t.test, there is a significant difference
 # in the medians between A schools and B schools.
 
-
-
-
-
-########## Problem 3 ##########
-
-
-
-
-## Read in the data
-
-data_3 <- read.csv("~/Documents/Rice_University/Spring_2018/STAT616/HW05/lutenize.csv")$level
-
-## Calculate the average
-
-mu_3 <- mean(data_3)
-
-## Center the data
-
-z <- data_3 - mu_3
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
